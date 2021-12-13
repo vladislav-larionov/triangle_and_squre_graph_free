@@ -1,17 +1,18 @@
 from graph import Graph
 
 
-def find_spanning_tree(graph, n: int) -> Graph:
-    tree = Graph(n)
-    tree.nodes.add(0)
+def find_spanning_tree(graph, n: int, tree=None) -> Graph:
+    if not tree:
+        tree = Graph(n)
+        tree.nodes.add(0)
     max_edge_count = tree.n - 1
-    while len(tree.edges) < max_edge_count:
+    while len(tree.nodes) < tree.n:
         candidates = list()
         for node in tree.nodes:
             candidates.extend(find_candidates(graph, node, tree.nodes))
-        min_edge = find_max_edge(candidates)
-        tree.nodes.add(min_edge[1])
-        tree.add_edge((min_edge[0], min_edge[1], min_edge[2]))
+        max_edge = find_max_edge(candidates)
+        tree.nodes.add(max_edge[1])
+        tree.add_edge((max_edge[0], max_edge[1], max_edge[2]))
     return tree
 
 

@@ -74,6 +74,8 @@ class Graph:
             for neighbor in self.adj_list[s]:
                 if neighbor not in visited:
                     dist[neighbor] = dist[s] + 1
+                    if neighbor == to_node:
+                        return dist[neighbor]
                     visited.add(neighbor)
                     queue.append(neighbor)
         return dist[to_node]
