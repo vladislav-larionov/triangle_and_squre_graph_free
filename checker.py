@@ -44,6 +44,7 @@ def edges_to_node_set(edges):
 
 
 def main():
+    sys.setrecursionlimit(10000)
     res_file_path = sys.argv[1]
     edges, weight, n, e = read_res(res_file_path)
     graph = read_matrix(f'Taxicab_{n}_matrix.txt')

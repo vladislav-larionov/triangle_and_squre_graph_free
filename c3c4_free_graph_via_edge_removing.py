@@ -86,6 +86,36 @@ def find_and_remove_squares(g):
                             matrix[indexes[0]][indexes[1]] = 0
                             matrix[indexes[1]][indexes[0]] = 0
 
+def find_and_remove_3c_4c(matrix):
+    n = len(matrix)
+    for a in range(0, n):
+        for b in range(0, n):
+            if matrix[a][b] == 0:
+                continue
+            for c in range(0, n):
+                if matrix[a][c] == 0:
+                    continue
+                if matrix[a][b] and matrix[b][c] and matrix[a][c]:
+                    if len({a, b, c}) == 3:
+                        weights = {matrix[a][b]: (a, b),
+                                   matrix[b][c]: (b, c),
+                                   matrix[a][c]: (a, c)}
+                        m = min(weights.keys())
+                        indexes = weights[m]
+                        matrix[indexes[0]][indexes[1]] = 0
+                        matrix[indexes[1]][indexes[0]] = 0
+                for d in range(0, n):
+                    if matrix[a][b] and matrix[a][c] and matrix[c][d] and matrix[b][d]:
+                        if len({a, b, c, d}) == 4:
+                            weights = {matrix[a][b]: (a, b),
+                                       matrix[a][c]: (a, c),
+                                       matrix[c][d]: (c, d),
+                                       matrix[b][d]: (b, d)}
+                            m = min(weights.keys())
+                            indexes = weights[m]
+                            matrix[indexes[0]][indexes[1]] = 0
+                            matrix[indexes[1]][indexes[0]] = 0
+
 
 def print_result(matrix, edges, short=False):
     print(f'c Вес подграфа = {sum(map(lambda e: e[2], edges))}')
@@ -97,17 +127,8 @@ def print_result(matrix, edges, short=False):
 
 if __name__ == "__main__":
     # matrix = read_matrix('../Taxicab_64_matrix_t.txt')
-    matrix = read_matrix('D:\Projects\Python\С3C4Free\Taxicab_512_matrix.txt')
-    # remove_triangles(matrix, find_triangles(matrix))
-    # remove_squares(matrix, find_squares(matrix))
-    find_and_remove_triangles(matrix)
-    find_and_remove_squares(matrix)
-    print_result(matrix, matrix_to_edge_list(matrix))
-    print_result_matrix(matrix, matrix_to_edge_list(matrix))
-    print()
-    print()
-    matrix = read_matrix('D:\Projects\Python\С3C4Free\Taxicab_512_matrix.txt')
-    find_and_remove_squares(matrix)
-    find_and_remove_triangles(matrix)
+    matrix = read_matrix('D:\Projects\Python\С3C4Free\Taxicab_4096_matrix.txt')
+    find_and_remove_3c_4c(matrix)
+    # find_and_remove_squares(matrix)
     print_result(matrix, matrix_to_edge_list(matrix))
     print_result_matrix(matrix, matrix_to_edge_list(matrix))
