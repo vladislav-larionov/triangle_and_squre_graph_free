@@ -22,8 +22,6 @@ def find_c3c4_free_graph(graph):
     print_result_to_file(graph, max_spanning_tree)
     for i in range(2):
         max_spanning_tree = rebuild_graph(graph, max_spanning_tree)
-        if old_res == max_spanning_tree.weight:
-            break
         print_result_to_file(graph, max_spanning_tree)
     return max_spanning_tree
 

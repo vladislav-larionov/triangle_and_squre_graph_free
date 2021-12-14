@@ -55,7 +55,7 @@ def print_formatted_matrix(matrix):
 
 def print_result_matrix(matrix, edges, file_name=None, matrix_print=False, rewrite=False):
     if not file_name:
-        file_name = f'temp_res_{len(matrix)}.txt'
+        file_name = f'D:\\Projects\\Python\\С3C4Free\\temp_res_{len(matrix)}.txt'
     mode = 'w' if rewrite else 'a+'
     with open(file_name, mode, encoding='utf-8') as file:
         file.write(f'c Вес подграфа = {sum(map(lambda e: e[2], edges))}\n')

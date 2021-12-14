@@ -41,7 +41,6 @@ def find_triangles(g):
 """
 def find_squares(g):
     cycles = set()
-    cycles_stringifyred = set()
     n = len(g)
     for a in range(0, n):
         for b in range(0, n):
@@ -49,50 +48,43 @@ def find_squares(g):
                 for d in range(0, n):
                     if g[a][b] and g[a][c] and g[c][d] and g[b][d]:
                         if len({a, b, c, d}) == 4:
-                            # cycles.add((a, b, c, d, g[a][b] + g[a][c] + g[c][d] + g[b][d]))
                             cycles.add((a, b, c, d))
-                            # cycle = tuple(sorted([a, b, c, d]))
-                            # if cycle not in cycles_stringifyred:
-                            #     cycles_stringifyred.add(cycle)
-                            #     cycles.add((a, b, c, d))
     return cycles
 
 
-def remove_triangles(matrix, triangles):
-    # print(len(triangles))
-    # g[a][b] g[b][c] and g[a][c]:
-    a = 0
-    b = 1
-    c = 2
-    for triangle in triangles:
-        # print(square)
-        weights = {matrix[triangle[a]][triangle[b]]: (triangle[a], triangle[b]),
-                   matrix[triangle[b]][triangle[c]]: (triangle[b], triangle[c]),
-                   matrix[triangle[a]][triangle[c]]: (triangle[a], triangle[c])}
-        m = min(weights.keys())
-        indexes = weights[m]
-        matrix[indexes[0]][indexes[1]] = 0
-        matrix[indexes[1]][indexes[0]] = 0
+def find_and_remove_triangles(g):
+    n = len(g)
+    for a in range(0, n):
+        for b in range(a + 1, n):
+            if not g[a][b]:
+                continue
+            for c in range(b + 1, n):
+                if g[b][c] and g[a][c]:
+                    weights = {matrix[a][b]: (a, b),
+                               matrix[b][c]: (b, c),
+                               matrix[a][c]: (a, c)}
+                    m = min(weights.keys())
+                    indexes = weights[m]
+                    matrix[indexes[0]][indexes[1]] = 0
+                    matrix[indexes[1]][indexes[0]] = 0
 
-
-def remove_squares(matrix, squares):
-    # print(len(squares))
+def find_and_remove_squares(g):
+    n = len(g)
     # if g[a][b] and g[a][c] and g[c][d] and g[b][d]:
-    a = 0
-    b = 1
-    c = 2
-    d = 3
-    # for square in sorted(squares, key=lambda s: s[4]):
-    for square in squares:
-        # print(square)
-        weights = {matrix[square[a]][square[b]]: (square[a], square[b]),
-                   matrix[square[a]][square[c]]: (square[a], square[c]),
-                   matrix[square[c]][square[d]]: (square[c], square[d]),
-                   matrix[square[b]][square[d]]: (square[b], square[d])}
-        m = min(weights.keys())
-        indexes = weights[m]
-        matrix[indexes[0]][indexes[1]] = 0
-        matrix[indexes[1]][indexes[0]] = 0
+    for a in range(0, n):
+        for b in range(0, n):
+            for c in range(0, n):
+                for d in range(0, n):
+                    if g[a][b] and g[a][c] and g[c][d] and g[b][d]:
+                        if len({a, b, c, d}) == 4:
+                            weights = {matrix[a][b]: (a, b),
+                                       matrix[a][c]: (a, c),
+                                       matrix[c][d]: (c, d),
+                                       matrix[b][d]: (b, d)}
+                            m = min(weights.keys())
+                            indexes = weights[m]
+                            matrix[indexes[0]][indexes[1]] = 0
+                            matrix[indexes[1]][indexes[0]] = 0
 
 
 def print_result(matrix, edges, short=False):
@@ -105,14 +97,17 @@ def print_result(matrix, edges, short=False):
 
 if __name__ == "__main__":
     # matrix = read_matrix('../Taxicab_64_matrix_t.txt')
-    matrix = read_matrix('D:\Projects\Python\С3C4Free\Taxicab_64_matrix.txt')
-    remove_triangles(matrix, find_triangles(matrix))
-    remove_squares(matrix, find_squares(matrix))
+    matrix = read_matrix('D:\Projects\Python\С3C4Free\Taxicab_512_matrix.txt')
+    # remove_triangles(matrix, find_triangles(matrix))
+    # remove_squares(matrix, find_squares(matrix))
+    find_and_remove_triangles(matrix)
+    find_and_remove_squares(matrix)
     print_result(matrix, matrix_to_edge_list(matrix))
     print_result_matrix(matrix, matrix_to_edge_list(matrix))
-    #
-    matrix = read_matrix('D:\Projects\Python\С3C4Free\Taxicab_64_matrix.txt')
-    remove_squares(matrix, find_squares(matrix))
-    remove_triangles(matrix, find_triangles(matrix))
+    print()
+    print()
+    matrix = read_matrix('D:\Projects\Python\С3C4Free\Taxicab_512_matrix.txt')
+    find_and_remove_squares(matrix)
+    find_and_remove_triangles(matrix)
     print_result(matrix, matrix_to_edge_list(matrix))
     print_result_matrix(matrix, matrix_to_edge_list(matrix))
