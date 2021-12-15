@@ -22,8 +22,9 @@ def main():
     edges, weight, n, e = read_res(res_file_path)
     matrix = read_matrix(f'Taxicab_{n}_matrix.txt')
     graph = create_tree_by_edge(matrix, edges, n)
+    removed = set()
     for i in range(2):
-        graph = rebuild_graph(matrix, graph)
+        graph = rebuild_graph(matrix, graph, removed)
         print_result_to_file(matrix, graph)
 
 
