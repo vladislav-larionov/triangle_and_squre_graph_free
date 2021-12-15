@@ -1,9 +1,8 @@
 import sys
 
-from c3c4_free_graph import rebuild_graph
 from checker import read_res
-from graph import Graph
-from graph_reader import read_matrix
+from graph import Graph, edge_to_str
+from graph_reader import read_matrix, matrix_to_edge_list
 from print_utils import print_result_to_file
 
 
@@ -15,6 +14,28 @@ def create_tree_by_edge(graph, edges, n):
         tree.nodes.add(edge[1])
         tree.add_edge(tuple(edge))
     return tree
+
+
+def rebuild_graph(original_graph, graph: Graph, removed: set):
+    leaves, leaf_edges = remove_leaves(graph)
+    removed.update([edge_to_str(e) for e in leaf_edges])
+    bad_edges = set(removed)
+    bad_edges.update([edge_to_str(e) for e in graph.edges])
+    bad_edges.update([edge_to_str(e) for e in removed])
+    edges = filter(lambda e: edge_to_str(e) not in removed, set(matrix_to_edge_list(original_graph)))
+    for edge in sorted(filter(lambda e: e[0] in leaves or e[1] in leaves, edges), key=lambda e: e[2], reverse=True):
+        dist = graph.distance(edge[0], edge[1])
+        if dist >= 4 or dist <= 1:
+            graph.add_edge(edge)
+    print(graph.weight)
+    return graph
+
+
+def remove_leaves(graph: Graph):
+    leaf_edges, leaves = graph.get_leaves()
+    for leaf in leaf_edges:
+        graph.remove_edge(leaf)
+    return set(leaves), set(leaf_edges)
 
 
 def main():
