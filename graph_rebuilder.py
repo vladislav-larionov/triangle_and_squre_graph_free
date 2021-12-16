@@ -18,6 +18,11 @@ def create_tree_by_edge(graph, edges, n):
 
 def rebuild_graph(original_graph, graph: Graph, removed: set):
     leaves, leaf_edges = remove_leaves(graph)
+    # sorted_leaf_edges = sorted(leaf_edges, key=lambda e: e[2])
+    # if len(sorted_leaf_edges) > 5:
+    #     sorted_leaf_edges = sorted_leaf_edges[5:]
+    for e in list(sorted(graph.edges, key=lambda e: e[2]))[:5]:
+         graph.remove_edge(e)
     removed.update([edge_to_str(e) for e in leaf_edges])
     bad_edges = set(removed)
     bad_edges.update([edge_to_str(e) for e in graph.edges])
@@ -44,7 +49,7 @@ def main():
     matrix = read_matrix(f'Taxicab_{n}_matrix.txt')
     graph = create_tree_by_edge(matrix, edges, n)
     removed = set()
-    for i in range(2):
+    for i in range(10):
         graph = rebuild_graph(matrix, graph, removed)
         print_result_to_file(matrix, graph)
 
